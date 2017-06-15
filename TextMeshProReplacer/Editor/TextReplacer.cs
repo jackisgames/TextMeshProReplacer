@@ -129,10 +129,10 @@ namespace TextMeshProReplacer
             textData.write(currentText,font);
 
             //Selection.activeObject = obj;
-            Object.DestroyImmediate(currentText);
+            Undo.DestroyObjectImmediate(currentText);
 
-
-            TextMeshProUGUI tmproText = obj.AddComponent<TextMeshProUGUI>();
+            
+            TextMeshProUGUI tmproText = Undo.AddComponent<TextMeshProUGUI>(obj);
             tmproText.autoSizeTextContainer = false;
             textData.read(tmproText);
             tmproText.rectTransform.sizeDelta = size;
@@ -180,6 +180,8 @@ namespace TextMeshProReplacer
         private Color color;
         private float fontSize;
         private FontStyles fontStyle;
+        private bool autoResize;
+        private Vector2 minMaxSize;
         public void write(Text textObject,TMP_FontAsset tmpFont)
         {
 
@@ -188,6 +190,8 @@ namespace TextMeshProReplacer
             fontStyle = GetFontStyle(textObject.fontStyle);
             tmProfont = tmpFont;
             anchor = GetTextAlignment(textObject.alignment);
+            autoResize = textObject.resizeTextForBestFit;
+            minMaxSize = new Vector2(textObject.resizeTextMinSize, textObject.resizeTextMaxSize);
             if (textObject.fontStyle == FontStyle.BoldAndItalic)
                 text = string.Format("<i>{0}</i>", textObject.text);
             else
@@ -202,6 +206,10 @@ namespace TextMeshProReplacer
             textObject.fontStyle = fontStyle;
 
             textObject.alignment = anchor;
+
+            textObject.enableAutoSizing = autoResize;
+            textObject.fontSizeMin = minMaxSize.x;
+            textObject.fontSizeMax = minMaxSize.y;
 
             if (tmProfont != null)
                 textObject.font = tmProfont;
