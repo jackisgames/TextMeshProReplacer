@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEditor;
@@ -16,9 +17,20 @@ namespace TextMeshProReplacer
         internal static void ReplaceCurrentScene()
         {
 
-            Text[] allText = Object.FindObjectsOfType<Text>();
-            ReplaceUnityText(allText);
+            GameObject[] rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+            for (int i = 0; i < rootGameObjects.Length; i++)
+            {
+                GameObject root = rootGameObjects[i];
+                for (int j = 0; j < root.transform.childCount; j++)
+                {
+                    Text text = root.transform.GetChild(j).GetComponent<Text>();
+                    if (text)
+                        ReplaceUnityText(text);
+                }
+            }
+                
         }
+
         [MenuItem("Text Mesh Replacer/Replace All Scene")]
         internal static void ReplaceAllScene()
         {
@@ -32,7 +44,7 @@ namespace TextMeshProReplacer
                 {
                     //wait
                 }
-
+               
                 ReplaceCurrentScene();
 
                 EditorSceneManager.SaveScene(loadedScene);
