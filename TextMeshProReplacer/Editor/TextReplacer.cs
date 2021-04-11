@@ -173,10 +173,10 @@ namespace TextMeshProReplacer
             for (int i = 0; i < fonts.Length; i++)
             {
                 TMP_FontAsset fontAsset = fonts[i];
-                if (fontAsset.fontInfo.Name.Equals(m_font.name, System.StringComparison.OrdinalIgnoreCase))
+                if (fontAsset.faceInfo.familyName.Equals(m_font.name, System.StringComparison.OrdinalIgnoreCase))
                     return fontAsset;
 
-                if (System.Array.Exists(m_font.fontNames,(s)=>s.Equals(fontAsset.fontInfo.Name,System.StringComparison.OrdinalIgnoreCase)))
+                if (System.Array.Exists(m_font.fontNames,(s)=>s.Equals(fontAsset.faceInfo.familyName,System.StringComparison.OrdinalIgnoreCase)))
                 {
                     return fontAsset;
                 }
